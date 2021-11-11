@@ -15,6 +15,11 @@ namespace TokenBasedAuthentication.API.Domain.UnitOfWork
         {
             await _context.SaveChangesAsync();
         }
+
+        public void Complete()
+        {
+             _context.SaveChanges();
+        }
     }
 }
 

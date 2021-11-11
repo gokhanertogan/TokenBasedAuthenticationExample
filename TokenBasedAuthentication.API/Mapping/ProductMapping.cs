@@ -4,12 +4,11 @@ using TokenBasedAuthentication.API.Resources;
 
 namespace TokenBasedAuthentication.API.Mapping
 {
-    public class ProductMapping
+    public class ProductMapping :Profile
     {
         public ProductMapping()
         {
-            CreateMap<ProductResource,Product>();
-            CreateMap<Product,ProductResource>();    
+            CreateMap<ProductResource,Product>().ReverseMap();   
         }
     }
 }
