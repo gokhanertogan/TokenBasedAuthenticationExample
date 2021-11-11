@@ -38,6 +38,7 @@ namespace TokenBasedAuthentication.API.Domain.Repositories
         {
             var newUser = _context.Users.Find(user.Id);
             newUser.RefreshToken = null;
+            newUser.RefreshTokenEndDate=null;
         }
 
         public void SaveRefreshToken(int userId, string refreshToken)

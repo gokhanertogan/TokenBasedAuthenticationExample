@@ -18,12 +18,12 @@ namespace TokenBasedAuthentication.API.Services
 
         public AccessTokenResponse CreateAccessToken(string emaill, string password)
         {
-            UserResponse userResponse= _userService.FindByEmailAndPassword(emaill,password);
+            UserResponse userResponse = _userService.FindByEmailAndPassword(emaill, password);
 
             if (userResponse.Success)
             {
-                AccessToken accessToken= _tokenHandler.CreateAccessToken(userResponse.User);
-
+                AccessToken accessToken = _tokenHandler.CreateAccessToken(userResponse.User);
+                _userService.SaveRefreshToken(userResponse.User.Id, accessToken.RefreshToken);
                 return new AccessTokenResponse(accessToken);
             }
 
@@ -32,14 +32,14 @@ namespace TokenBasedAuthentication.API.Services
 
         public AccessTokenResponse CreateAccessTokenByRefreshToken(string refreshToken)
         {
-            UserResponse userResponse= _userService.GetUserWithRefreshToken(refreshToken);
+            UserResponse userResponse = _userService.GetUserWithRefreshToken(refreshToken);
 
             if (userResponse.Success)
             {
-                if(userResponse.User.RefreshTokenEndDate<DateTime.Now)
+                if (userResponse.User.RefreshTokenEndDate > DateTime.Now)
                 {
-                    AccessToken accessToken= _tokenHandler.CreateAccessToken(userResponse.User);
-
+                    AccessToken accessToken = _tokenHandler.CreateAccessToken(userResponse.User);
+                    _userService.SaveRefreshToken(userResponse.User.Id, accessToken.RefreshToken);
                     return new AccessTokenResponse(accessToken);
                 }
 
@@ -51,7 +51,7 @@ namespace TokenBasedAuthentication.API.Services
 
         public AccessTokenResponse RevokeRefreshToken(string refreshToken)
         {
-            UserResponse userResponse= _userService.GetUserWithRefreshToken(refreshToken);
+            UserResponse userResponse = _userService.GetUserWithRefreshToken(refreshToken);
 
             if (userResponse.Success)
             {

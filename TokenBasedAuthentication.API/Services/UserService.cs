@@ -86,6 +86,7 @@ namespace TokenBasedAuthentication.API.Services
             try
             {
                 _userRepository.RevokeRefreshToken(user);
+                _unitOfWork.Complete();
             }
             catch
             {
