@@ -29,6 +29,8 @@ namespace TokenBasedAuthentication.API
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.AddScoped<IUserService,UserService>();
+            services.AddScoped<IUserRepository,UserRepository>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -43,16 +45,21 @@ namespace TokenBasedAuthentication.API
                 });
             });
 
+            services.Configure<TokenOptions>(Configuration.GetSection("TokenOptions"));
+            
+            var tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();
 
-            var tokenOptions= Configuration.GetSection("TokenOptions").Get<TokenOptions>();
-
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt=>{
-                opt.TokenValidationParameters=new Microsoft.IdentityModel.Tokens.TokenValidationParameters(){
-                    ValidateAudience=true,
-                    ValidateIssuer=true,
-                    ValidateLifetime=true,
-                    ValidIssuer=tokenOptions.Issuer,
-                    ValidAudience=tokenOptions.Audience
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
+            {
+                opt.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+                {
+                    ValidateAudience = true,
+                    ValidateIssuer = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey=true,
+                    ValidIssuer = tokenOptions.Issuer,
+                    ValidAudience = tokenOptions.Audience,
+                    IssuerSigningKey=SingHandler.GetSecurityKey(tokenOptions.SecurityKey)
                 };
             });
 
