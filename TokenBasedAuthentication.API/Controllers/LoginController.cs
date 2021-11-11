@@ -6,7 +6,7 @@ using TokenBasedAuthentication.API.Resources;
 namespace TokenBasedAuthentication.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     public class LoginController : ControllerBase
     {
         private readonly IAuthenticationService _authenticationService;
