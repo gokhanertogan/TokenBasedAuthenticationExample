@@ -1,4 +1,5 @@
 using System;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using TokenBasedAuthentication.API.Domain;
 using TokenBasedAuthentication.API.Domain.Repositories;
 using TokenBasedAuthentication.API.Domain.Services;
 using TokenBasedAuthentication.API.Domain.UnitOfWork;
+using TokenBasedAuthentication.API.Security.Token;
 using TokenBasedAuthentication.API.Services;
 
 namespace TokenBasedAuthentication.API
@@ -41,6 +43,19 @@ namespace TokenBasedAuthentication.API
                 });
             });
 
+
+            var tokenOptions= Configuration.GetSection("TokenOptions").Get<TokenOptions>();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt=>{
+                opt.TokenValidationParameters=new Microsoft.IdentityModel.Tokens.TokenValidationParameters(){
+                    ValidateAudience=true,
+                    ValidateIssuer=true,
+                    ValidateLifetime=true,
+                    ValidIssuer=tokenOptions.Issuer,
+                    ValidAudience=tokenOptions.Audience
+                };
+            });
+
             services.AddDbContext<TokenContext>(options =>
                  options.UseSqlServer(Configuration.GetConnectionString("TokenDbConnectionString")));
 
@@ -66,6 +81,7 @@ namespace TokenBasedAuthentication.API
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
