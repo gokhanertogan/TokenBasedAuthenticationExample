@@ -6,9 +6,11 @@ using TokenBasedAuthentication.API.Domain.Services;
 using TokenBasedAuthentication.API.Resources;
 using TokenBasedAuthentication.API.Extensions;
 using TokenBasedAuthentication.API.Domain.Model;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TokenBasedAuthentication.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ProductController : ControllerBase
@@ -120,7 +122,7 @@ namespace TokenBasedAuthentication.API.Controllers
             {
                 return BadRequest(productResponse.Message);
             }
-        } 
+        }
 
     }
 }
