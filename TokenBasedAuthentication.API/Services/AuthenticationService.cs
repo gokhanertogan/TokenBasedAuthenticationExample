@@ -1,4 +1,5 @@
 using System;
+using TokenBasedAuthentication.API.Domain.Model;
 using TokenBasedAuthentication.API.Domain.Responses;
 using TokenBasedAuthentication.API.Domain.Services;
 using TokenBasedAuthentication.API.Security.Token;
@@ -16,51 +17,51 @@ namespace TokenBasedAuthentication.API.Services
             _tokenHandler = tokenHandler;
         }
 
-        public AccessTokenResponse CreateAccessToken(string emaill, string password)
+        public BaseResponse<AccessToken> CreateAccessToken(string emaill, string password)
         {
-            UserResponse userResponse = _userService.FindByEmailAndPassword(emaill, password);
+            BaseResponse<User> userResponse = _userService.FindByEmailAndPassword(emaill, password);
 
             if (userResponse.Success)
             {
-                AccessToken accessToken = _tokenHandler.CreateAccessToken(userResponse.User);
-                _userService.SaveRefreshToken(userResponse.User.Id, accessToken.RefreshToken);
-                return new AccessTokenResponse(accessToken);
+                AccessToken accessToken = _tokenHandler.CreateAccessToken(userResponse.Model);
+                _userService.SaveRefreshToken(userResponse.Model.Id, accessToken.RefreshToken);
+                return new BaseResponse<AccessToken>(accessToken);
             }
 
-            return new AccessTokenResponse(userResponse.Message);
+            return new BaseResponse<AccessToken>(userResponse.Message);
         }
 
-        public AccessTokenResponse CreateAccessTokenByRefreshToken(string refreshToken)
+        public BaseResponse<AccessToken> CreateAccessTokenByRefreshToken(string refreshToken)
         {
-            UserResponse userResponse = _userService.GetUserWithRefreshToken(refreshToken);
+            BaseResponse<User> userResponse = _userService.GetUserWithRefreshToken(refreshToken);
 
             if (userResponse.Success)
             {
-                if (userResponse.User.RefreshTokenEndDate > DateTime.Now)
+                if (userResponse.Model.RefreshTokenEndDate > DateTime.Now)
                 {
-                    AccessToken accessToken = _tokenHandler.CreateAccessToken(userResponse.User);
-                    _userService.SaveRefreshToken(userResponse.User.Id, accessToken.RefreshToken);
-                    return new AccessTokenResponse(accessToken);
+                    AccessToken accessToken = _tokenHandler.CreateAccessToken(userResponse.Model);
+                    _userService.SaveRefreshToken(userResponse.Model.Id, accessToken.RefreshToken);
+                    return new BaseResponse<AccessToken>(accessToken);
                 }
 
-                return new AccessTokenResponse("The token has expired.");
+                return new BaseResponse<AccessToken>("The token has expired.");
             }
 
-            return new AccessTokenResponse("Could not found user with refresh token");
+            return new BaseResponse<AccessToken>("Could not found user with refresh token");
         }
 
-        public AccessTokenResponse RevokeRefreshToken(string refreshToken)
+        public BaseResponse<AccessToken> RevokeRefreshToken(string refreshToken)
         {
-            UserResponse userResponse = _userService.GetUserWithRefreshToken(refreshToken);
+            BaseResponse<User> userResponse = _userService.GetUserWithRefreshToken(refreshToken);
 
             if (userResponse.Success)
             {
-                _userService.RevokeRefreshToken(userResponse.User);
+                _userService.RevokeRefreshToken(userResponse.Model);
 
-                return new AccessTokenResponse(new AccessToken());
+                return new BaseResponse<AccessToken>(new AccessToken());
             }
 
-            return new AccessTokenResponse("Could not found user with refresh token");
+            return new BaseResponse<AccessToken>("Could not found user with refresh token");
         }
     }
 }

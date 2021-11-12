@@ -25,7 +25,7 @@ namespace TokenBasedAuthentication.API.Controllers
             var accessResponse = _authenticationService.CreateAccessToken(loginResource.Email, loginResource.Password);
 
             if (accessResponse.Success)
-                return Ok(accessResponse.AccessToken);
+                return Ok(accessResponse.Model);
 
             return BadRequest(accessResponse.Message);
         }
@@ -36,7 +36,7 @@ namespace TokenBasedAuthentication.API.Controllers
             var accessResponse = _authenticationService.CreateAccessTokenByRefreshToken(tokenResource.RefreshToken);
 
             if (accessResponse.Success)
-                return Ok(accessResponse.AccessToken);
+                return Ok(accessResponse.Model);
 
             return BadRequest(accessResponse.Message);
         }
@@ -47,7 +47,7 @@ namespace TokenBasedAuthentication.API.Controllers
             var accessResponse = _authenticationService.RevokeRefreshToken(tokenResource.RefreshToken);
 
             if (accessResponse.Success)
-                return Ok(accessResponse.AccessToken);
+                return Ok(accessResponse.Model);
 
             return BadRequest(accessResponse.Message);
         }

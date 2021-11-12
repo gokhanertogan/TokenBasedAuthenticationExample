@@ -29,7 +29,7 @@ namespace TokenBasedAuthentication.API.Controllers
         {
             IEnumerable<Claim> claims = User.Claims;
             string userId = claims.Where(x => x.Type == ClaimTypes.NameIdentifier).First().Value;
-            UserResponse userResponse = _userService.FindById(int.Parse(userId));
+            BaseResponse<User> userResponse = _userService.FindById(int.Parse(userId));
 
             if (userResponse.Success)
             {
@@ -46,11 +46,11 @@ namespace TokenBasedAuthentication.API.Controllers
         public IActionResult AddUser(UserResource userResource)
         {
             User user= _mapper.Map<UserResource,User>(userResource);
-            UserResponse userResponse=_userService.AddUser(user);
+            BaseResponse<User> userResponse=_userService.AddUser(user);
 
             if (userResponse.Success)
             {
-                return Ok(userResponse.User);
+                return Ok(userResponse.Model);
             }
             else
             {

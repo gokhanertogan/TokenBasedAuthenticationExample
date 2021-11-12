@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TokenBasedAuthentication.API.Domain.Model;
 using TokenBasedAuthentication.API.Domain.Repositories;
@@ -19,7 +20,7 @@ namespace TokenBasedAuthentication.API.Services
             _productRepository = productRepository;
         }
 
-        public async Task<ProductResponse> AddProduct(Product product)
+        public async Task<BaseResponse<Product>> AddProduct(Product product)
         {
             try
             {
@@ -27,74 +28,74 @@ namespace TokenBasedAuthentication.API.Services
 
                 await _unitOfWork.CompleteAsync();
 
-                return new ProductResponse(product);
+                return new BaseResponse<Product>(product);
             }
 
             catch(Exception ex)
             {
-                return new ProductResponse($"Error an occurred while adding a product : {ex.Message}");
+                return new BaseResponse<Product>($"Error an occurred while adding a product : {ex.Message}");
             }
         }
 
-        public async Task<ProductResponse> FindByIdAsync(int productId)
+        public async Task<BaseResponse<Product>> FindByIdAsync(int productId)
         {
             try
             {
                 var product =await _productRepository.FindByIdAsync(productId);
                 if(product==null)
-                    return new ProductResponse($"Could not find product");
+                    return new BaseResponse<Product>($"Could not find product");
 
-                return new ProductResponse(product);
+                return new BaseResponse<Product>(product);
             }
 
             catch(Exception ex)
             {
-                return new ProductResponse($"Error an occurred while finding the product : {ex.Message}");
+                return new BaseResponse<Product>($"Error an occurred while finding the product : {ex.Message}");
             }
         }
 
-        public async Task<ProductListResponse> ListAsync()
+        public async Task<BaseResponse<IEnumerable<Product>>> ListAsync()
         {
             try
             {
                 var productList =await _productRepository.ListAsync();
 
-                return new ProductListResponse(productList);
+                return new BaseResponse<IEnumerable<Product>>(productList);
             }
 
             catch(Exception ex)
             {
-                return new ProductListResponse($"Error an occurred while getting the product list : {ex.Message}");
+                return new BaseResponse<IEnumerable<Product>>($"Error an occurred while getting the product list : {ex.Message}");
             }
         }
 
-        public async Task<ProductResponse> RemoveProduct(int productId)
+        public async Task<BaseResponse<Product>> RemoveProduct(int productId)
         {
             try
             {
                 var product =await _productRepository.FindByIdAsync(productId);
                 if(product==null)
-                    return new ProductResponse($"Could not find product");
+                    return new BaseResponse<Product>($"Could not find product");
 
                 await _productRepository.RemoveProductAsync(productId);    
                 await _unitOfWork.CompleteAsync();
 
-                return new ProductResponse(product);
+                return new BaseResponse<Product>(product);
             }
 
             catch(Exception ex)
             {
-                return new ProductResponse($"Error an occurred while deleting the product : {ex.Message}");
+                return new BaseResponse<Product>($"Error an occurred while deleting the product : {ex.Message}");
             }
         }
 
-        public async Task<ProductResponse> UpdateProduct(Product product, int productId)
+        public async Task<BaseResponse<Product>> UpdateProduct(Product product, int productId)
         {
             try
             {
                 var firstProduct =await _productRepository.FindByIdAsync(productId);
                 if(firstProduct==null)
-                    return new ProductResponse($"Could not find product");
+                    return new BaseResponse<Product>($"Could not find product");
 
                 firstProduct.Name=product.Name;
                 firstProduct.Category=product.Category;
@@ -103,12 +104,12 @@ namespace TokenBasedAuthentication.API.Services
                 _productRepository.UpdateProductASync(firstProduct);    
                 await _unitOfWork.CompleteAsync();
 
-                return new ProductResponse(firstProduct);
+                return new BaseResponse<Product>(firstProduct);
             }
 
             catch(Exception ex)
             {
-                return new ProductResponse($"Error an occurred while updating the product : {ex.Message}");
+                return new BaseResponse<Product>($"Error an occurred while updating the product : {ex.Message}");
             }
         }
     }

@@ -7,6 +7,7 @@ using TokenBasedAuthentication.API.Resources;
 using TokenBasedAuthentication.API.Extensions;
 using TokenBasedAuthentication.API.Domain.Model;
 using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
 
 namespace TokenBasedAuthentication.API.Controllers
 {
@@ -27,11 +28,11 @@ namespace TokenBasedAuthentication.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetList()
         {
-            ProductListResponse productListResponse = await _productService.ListAsync();
+            BaseResponse<IEnumerable<Product>> productListResponse = await _productService.ListAsync();
 
             if (productListResponse.Success)
             {
-                return Ok(productListResponse.ProductList);
+                return Ok(productListResponse.Model);
             }
 
             else
@@ -44,11 +45,11 @@ namespace TokenBasedAuthentication.API.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetFindById(int id)
         {
-            ProductResponse productListResponse = await _productService.FindByIdAsync(id);
+            BaseResponse<Product> productListResponse = await _productService.FindByIdAsync(id);
 
             if (productListResponse.Success)
             {
-                return Ok(productListResponse.Product);
+                return Ok(productListResponse.Model);
             }
 
             else
@@ -75,7 +76,7 @@ namespace TokenBasedAuthentication.API.Controllers
 
                 if (productResponse.Success)
                 {
-                    return Ok(productResponse.Product);
+                    return Ok(productResponse.Model);
                 }
                 else
                 {
@@ -100,7 +101,7 @@ namespace TokenBasedAuthentication.API.Controllers
 
                 if (productResponse.Success)
                 {
-                    return Ok(productResponse.Product);
+                    return Ok(productResponse.Model);
                 }
                 else
                 {
@@ -116,7 +117,7 @@ namespace TokenBasedAuthentication.API.Controllers
 
             if (productResponse.Success)
             {
-                return Ok(productResponse.Product);
+                return Ok(productResponse.Model);
             }
             else
             {

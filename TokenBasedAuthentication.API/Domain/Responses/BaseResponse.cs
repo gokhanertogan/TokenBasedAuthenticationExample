@@ -1,13 +1,20 @@
 namespace TokenBasedAuthentication.API.Domain.Responses
 {
-    public class BaseResponse
+    public class BaseResponse<T> where T : class
     {
+        public T Model { get; set; }
         public bool Success { get; set; }
         public string Message { get; set; }
 
-        public BaseResponse(bool success, string message)
+        public BaseResponse(T extra)
         {
-            Success = success;
+            Success = true;
+            Model = extra;
+        }
+
+        public BaseResponse(string message)
+        {
+            Success = false;
             Message = message;
         }
     }

@@ -19,65 +19,65 @@ namespace TokenBasedAuthentication.API.Services
             _unitOfWork = unitOfWork;
         }
 
-        public UserResponse AddUser(User user)
+        public BaseResponse<User> AddUser(User user)
         {
             try
             {
                 _userRepository.AddUser(user);
                 _unitOfWork.Complete();
-                return new UserResponse(user);
+                return new BaseResponse<User>(user);
             }
             catch (Exception ex)
             {
-                return new UserResponse($"Error occurred while adding a new user :{ex.Message}");
+                return new BaseResponse<User>($"Error occurred while adding a new user :{ex.Message}");
             }
         }
 
-        public UserResponse FindByEmailAndPassword(string email, string password)
+        public BaseResponse<User> FindByEmailAndPassword(string email, string password)
         {
             try
             {
                 var user = _userRepository.FindByEmailAndPassword(email, password);
                 if (user == null)
-                    return new UserResponse("Could not found user");
+                    return new BaseResponse<User>("Could not found user");
 
-                return new UserResponse(user);
+                return new BaseResponse<User>(user);
             }
             catch (Exception ex)
             {
-                return new UserResponse($"Error occurred while finding a new user :{ex.Message}");
+                return new BaseResponse<User>($"Error occurred while finding a new user :{ex.Message}");
             }
         }
 
-        public UserResponse FindById(int userId)
+        public BaseResponse<User> FindById(int userId)
         {
             try
             {
                 var user = _userRepository.FindById(userId);
                 if (user == null)
-                    return new UserResponse("Could not found user");
+                    return new BaseResponse<User>("Could not found user");
 
-                return new UserResponse(user);
+                return new BaseResponse<User>(user);
             }
             catch (Exception ex)
             {
-                return new UserResponse($"Error occurred while finding a new user :{ex.Message}");
+                return new BaseResponse<User>($"Error occurred while finding a new user :{ex.Message}");
             }
         }
 
-        public UserResponse GetUserWithRefreshToken(string refreshToken)
+        public BaseResponse<User> GetUserWithRefreshToken(string refreshToken)
         {
             try
             {
                 var user = _userRepository.GetUserWithRefreshToken(refreshToken);
                 if (user == null)
-                    return new UserResponse("Could not found user");
+                    return new BaseResponse<User>("Could not found user");
 
-                return new UserResponse(user);
+                return new BaseResponse<User>(user);
             }
             catch (Exception ex)
             {
-                return new UserResponse($"Error occurred while finding a new user :{ex.Message}");
+                return new BaseResponse<User>($"Error occurred while finding a new user :{ex.Message}");
             }
         }
 
