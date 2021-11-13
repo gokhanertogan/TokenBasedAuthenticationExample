@@ -16,10 +16,10 @@ namespace TokenBasedAuthentication.API.Controllers
     [Route("api/[controller]")]
     public class ProductController : ControllerBase
     {
-        private readonly IProductService _productService;
+        private readonly IGenericService<Product> _productService;
         private readonly IMapper _mapper;
 
-        public ProductController(IProductService productService, IMapper mapper)
+        public ProductController(IGenericService<Product> productService, IMapper mapper)
         {
             _productService = productService;
             _mapper = mapper;
@@ -28,7 +28,7 @@ namespace TokenBasedAuthentication.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetList()
         {
-            BaseResponse<IEnumerable<Product>> productListResponse = await _productService.ListAsync();
+            BaseResponse<IEnumerable<Product>> productListResponse = await _productService.GetWhere(x=>x.Id>0);
 
             if (productListResponse.Success)
             {
@@ -45,7 +45,7 @@ namespace TokenBasedAuthentication.API.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetFindById(int id)
         {
-            BaseResponse<Product> productListResponse = await _productService.FindByIdAsync(id);
+            BaseResponse<Product> productListResponse = await _productService.GetById(id);
 
             if (productListResponse.Success)
             {
@@ -72,7 +72,7 @@ namespace TokenBasedAuthentication.API.Controllers
             {
                 var product = _mapper.Map<ProductResource, Product>(productResource);
 
-                var productResponse = await _productService.AddProduct(product);
+                var productResponse = await _productService.Add(product);
 
                 if (productResponse.Success)
                 {
@@ -96,8 +96,9 @@ namespace TokenBasedAuthentication.API.Controllers
             else
             {
                 var product = _mapper.Map<ProductResource, Product>(productResource);
+                product.Id=id;
 
-                var productResponse = await _productService.UpdateProduct(product, id);
+                var productResponse = await _productService.Update(product);
 
                 if (productResponse.Success)
                 {
@@ -113,7 +114,7 @@ namespace TokenBasedAuthentication.API.Controllers
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> RemoveProduct(int id)
         {
-            var productResponse = await _productService.RemoveProduct(id);
+            var productResponse = await _productService.Delete(id);
 
             if (productResponse.Success)
             {

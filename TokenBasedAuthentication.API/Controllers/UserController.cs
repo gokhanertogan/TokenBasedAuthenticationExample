@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,11 +26,11 @@ namespace TokenBasedAuthentication.API.Controllers
         }
 
         [Authorize]
-        public IActionResult GetUser()
+        public  IActionResult GetUser()
         {
             IEnumerable<Claim> claims = User.Claims;
             string userId = claims.Where(x => x.Type == ClaimTypes.NameIdentifier).First().Value;
-            BaseResponse<User> userResponse = _userService.FindById(int.Parse(userId));
+            BaseResponse<User> userResponse =  _userService.FindById(int.Parse(userId));
 
             if (userResponse.Success)
             {
@@ -45,8 +46,8 @@ namespace TokenBasedAuthentication.API.Controllers
         [HttpPost]
         public IActionResult AddUser(UserResource userResource)
         {
-            User user= _mapper.Map<UserResource,User>(userResource);
-            BaseResponse<User> userResponse=_userService.AddUser(user);
+            User user = _mapper.Map<UserResource, User>(userResource);
+            BaseResponse<User> userResponse = _userService.AddUser(user);
 
             if (userResponse.Success)
             {

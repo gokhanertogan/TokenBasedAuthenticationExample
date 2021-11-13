@@ -9,7 +9,6 @@ namespace TokenBasedAuthentication.API.Services
 {
     public class UserService : IUserService
     {
-
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
 

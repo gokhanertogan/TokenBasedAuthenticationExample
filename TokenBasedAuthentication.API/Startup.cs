@@ -28,12 +28,15 @@ namespace TokenBasedAuthentication.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped(typeof(IGenericService<>),typeof(GenericService<>));
+            services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
+
             services.AddScoped<IAuthenticationService,AuthenticationService>();
             services.AddScoped<ITokenHandler,TokenHandler>();    
             services.AddScoped<IUserService,UserService>();
             services.AddScoped<IUserRepository,UserRepository>();
-            services.AddScoped<IProductService, ProductService>();
-            services.AddScoped<IProductRepository, ProductRepository>();
+            //services.AddScoped<IProductService, ProductService>();
+            //services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

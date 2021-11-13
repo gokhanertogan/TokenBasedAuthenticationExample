@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "nlT0QmF4VnUIdBXGdrwGhTtx+89rKBp6fyZi0uzPkz9KYFquPqjek2cTg5JuxzqYiuaXDDO/yZBHrd8ox/EFsg==",
+  "dgSpecHash": "CzPykwByllFRNP97gEmImqw/nIrebKC3xqzZRQiX0OvLnmMGbhfuX25yZJMD6SjxgP8RlLRHaAd5ZYNYJ4M0rQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Monster\\source\\repos\\TokenBasedAuthenticationExample\\TokenBasedAuthentication.API\\TokenBasedAuthentication.API.csproj",
   "expectedPackageFiles": [
@@ -104,8 +104,7 @@
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.xml.readerwriter\\4.3.0\\system.xml.readerwriter.4.3.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512",
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512",
-    "C:\\Users\\Monster\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\5.0.12\\microsoft.netcore.app.host.win-x64.5.0.12.nupkg.sha512"
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512"
   ],
   "logs": []
 }
